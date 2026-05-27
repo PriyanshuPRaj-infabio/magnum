@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #050505;
+    color: #ECE7DF;
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom Hide Scrollbar for Cinematic Horizonal Navigation */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Luxury cursor elements */
+.luxury-cursor {
+  mix-blend-mode: difference;
+}
+
+/* Custom font utilities for direct manual mapping */
+.font-serif-lux {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.font-sans-lux {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-mono-lux {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Ambient glow pulsation keys */
+@keyframes ambientGlow {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(1.02);
+  }
+  50% {
+    opacity: 0.28;
+    transform: scale(0.98);
+  }
+}
+
+.ambient-illumination-pulse {
+  animation: ambientGlow 8s ease-in-out infinite;
+}
