@@ -49,8 +49,6 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
   // Interactive Custom modal for Shop Categories
   const [activeModalShop, setActiveModalShop] = useState<string | null>(null);
 
-  // Track images that fail to load locally
-  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   // Available photographers to filter
   const AVAILABLE_PHOTOGRAPHERS = [
@@ -449,14 +447,9 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
                       {/* Image Box */}
                       <div className={`relative ${config.aspect} overflow-hidden bg-stone-100 border border-stone-200/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]`}>
                         <img 
-                          src={failedImages[art.id] ? art.fallbackUrl : art.imageUrl} 
+                          src={art.imageUrl} 
                           alt={art.title} 
                           referrerPolicy="no-referrer"
-                          onError={() => {
-                            if (!failedImages[art.id]) {
-                              setFailedImages(prev => ({ ...prev, [art.id]: true }));
-                            }
-                          }}
                           className="w-full h-full object-cover grayscale transition-transform duration-[4000ms] ease-out group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

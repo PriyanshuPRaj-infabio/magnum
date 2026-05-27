@@ -149,11 +149,6 @@ export default function HeroMasterpiece({
                 src={imgSrc}
                 alt={masterpiece.title}
                 referrerPolicy="no-referrer"
-                onError={() => {
-                  if (masterpiece.fallbackUrl && imgSrc !== masterpiece.fallbackUrl) {
-                    setImgSrc(masterpiece.fallbackUrl);
-                  }
-                }}
                 className="w-[280px] h-[340px] md:w-[420px] md:h-[500px] object-cover transition-transform duration-[6000ms] group-hover:scale-105"
                 style={{ filter: "contrast(1.04) brightness(0.95)" }}
               />

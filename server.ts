@@ -11,8 +11,8 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Serve the user-uploaded JPG images from the project root
-app.use("/images-upload", express.static(path.join(process.cwd())));
+// Serve the user-uploaded JPG images from the new public directory location
+app.use("/images-upload", express.static(path.join(process.cwd(), "public", "images-upload")));
 
 // Lazy-initialized Gemini client
 let aiClient: GoogleGenAI | null = null;

@@ -381,11 +381,6 @@ export default function App() {
                           src={detailImgSrc}
                           alt={selectedArtwork?.title}
                           referrerPolicy="no-referrer"
-                          onError={() => {
-                            if (selectedArtwork?.fallbackUrl && detailImgSrc !== selectedArtwork.fallbackUrl) {
-                              setDetailImgSrc(selectedArtwork.fallbackUrl);
-                            }
-                          }}
                           className="w-full h-full object-cover transition-transform duration-[1200ms]"
                           style={{ transform: `scale(${zoomScale})` }}
                         />
@@ -502,9 +497,6 @@ export default function App() {
                         alt={aliArtwork.title}
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-1000"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = aliArtwork.fallbackUrl;
-                        }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
                       <span className="absolute bottom-4 left-4 font-mono-lux text-[8px] tracking-[0.25em] text-[#ECE7DF]/50">
@@ -815,11 +807,6 @@ export default function App() {
                     src={acquiryImgSrc}
                     alt="acquiring"
                     referrerPolicy="no-referrer"
-                    onError={() => {
-                      if (acquiryTarget?.fallbackUrl && acquiryImgSrc !== acquiryTarget.fallbackUrl) {
-                        setAcquiryImgSrc(acquiryTarget.fallbackUrl);
-                      }
-                    }}
                     className="w-16 h-20 object-cover border border-stone-800"
                   />
                   <div>

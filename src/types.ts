@@ -16,7 +16,6 @@ export interface Artwork {
   priceRange?: string; // e.g. "$450.00 – $895.00"
   availability?: "In stock" | "Out of stock";
   artistShort?: string; // used for filtering by photographer
-  fallbackUrl?: string; // High-res online fallback image
 }
 
 export interface Collection {
