@@ -736,7 +736,7 @@ export default function App() {
                 aria-label="FabulousMedia"
               >
                 <img
-                  src="/fabulous-logo.png"
+                  src="/public/fabulous-logo.png"
                   alt="FabulousMedia"
                   className="h-3 w-auto"
                 />
@@ -752,7 +752,7 @@ export default function App() {
                 aria-label="GoCommercially"
               >
                 <img
-                  src="/go_tm logo white.png"
+                  src="/public/go_tm logo white.png"
                   alt="GoCommercially"
                   className="h-3 w-auto"
                 />
