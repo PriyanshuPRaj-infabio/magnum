@@ -274,7 +274,7 @@ export default function App() {
   };
 
   return (
-    <div className={`relative min-h-screen ${currentMoodConfig.background} ${currentMoodConfig.textColor} transition-colors duration-[1500ms] overflow-x-hidden flex flex-col font-sans-lux`}>
+    <div className={`relative min-h-screen ${currentMoodConfig.background} ${currentMoodConfig.textColor} transition-colors duration-[1500ms] flex flex-col font-sans-lux`}>
 
       {/* Background cinematic vignette overlay */}
       <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_200px_rgba(0,0,0,0.96)] z-10" />

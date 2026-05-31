@@ -41,6 +41,12 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
   const [maxPrice, setMaxPrice] = useState<number>(900);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
+  // Collapsible Filter Sections
+  const [availabilityOpen, setAvailabilityOpen] = useState(true);
+  const [priceOpen, setPriceOpen] = useState(true);
+  const [photographerOpen, setPhotographerOpen] = useState(true);
+  const [sizeOpen, setSizeOpen] = useState(true);
   
   // Hover & visual States
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -178,7 +184,7 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
   });
 
   return (
-    <div id="gallery-corridor-track" className={`relative min-h-screen ${currentMoodConfig.background} ${currentMoodConfig.textColor} py-8 md:py-16 select-none overflow-x-hidden flex flex-col justify-between font-sans transition-colors duration-[1500ms]`}>
+    <div id="gallery-corridor-track" className={`relative min-h-screen ${currentMoodConfig.background} ${currentMoodConfig.textColor} py-8 md:py-16 select-none flex flex-col justify-between font-sans transition-colors duration-[1500ms]`}>
       
       {/* MAGNUM EDITIONS BRUSH HEADER */}
       <div className={`w-full max-w-7xl mx-auto px-6 md:px-12 mb-10 text-left border-b ${isDark ? "border-neutral-800" : "border-stone-200"} pb-8`}>
@@ -218,22 +224,36 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
       <div className="w-full max-w-7xl mx-auto px-6 md:px-12 flex-1 flex flex-col lg:flex-row gap-10 items-start">
         
         {/* LEFT COLUMN: THE MOUNTED FILTER PANEL (JUST LIKE SCREENSHOT) */}
-        <AnimatePresence>
-          {showFilters && (
-            <motion.aside
-              initial={{ opacity: 0, x: -30, width: 0 }}
-              animate={{ opacity: 1, x: 0, width: "260px" }}
-              exit={{ opacity: 0, x: -30, width: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className={`flex-shrink-0 w-[260px] space-y-8 pr-6 text-left border-r ${isDark ? "border-neutral-850" : "border-stone-200/80"} sticky top-[84px] hidden lg:block`}
-            >
-              
-              {/* Availability Filter Block */}
-              <div className="space-y-3">
-                <h3 className="font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold">
+        {/* LEFT COLUMN: THE MOUNTED FILTER PANEL (JUST LIKE SCREENSHOT) */}
+        {showFilters && (
+          <aside
+            className={`flex-shrink-0 w-[260px] pr-6 text-left border-r ${
+              isDark ? "border-neutral-850" : "border-stone-200/80"
+            } sticky top-[120px] self-start max-h-[calc(100vh-140px)] overflow-y-auto premium-scrollbar scroll-smooth hidden lg:block space-y-6`}
+          >
+            {/* Availability Filter Block */}
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setAvailabilityOpen(!availabilityOpen);
+                  audioAmbiance.playInquireTone();
+                }}
+                className="w-full flex items-center justify-between font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold text-left cursor-pointer group"
+              >
+                <span className="flex items-center gap-2">
                   Availability
-                </h3>
-                <div className={`space-y-2 font-mono text-xs ${isDark ? "text-neutral-300" : "text-stone-700"}`}>
+                  {selectedAvailability.length > 0 && (
+                    <span className={`inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[8px] font-mono rounded-full ${
+                      isDark ? "bg-[#8A6A45]/20 text-[#8A6A45]" : "bg-[#8A6A45]/15 text-[#8A6A45]"
+                    }`}>
+                      {selectedAvailability.length}
+                    </span>
+                  )}
+                </span>
+                <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-200 ${availabilityOpen ? "rotate-90" : ""}`} />
+              </button>
+              {availabilityOpen && (
+                <div className={`space-y-2 font-mono text-xs ${isDark ? "text-neutral-300" : "text-stone-700"} pt-1`}>
                   <label className={`flex items-center gap-3.5 cursor-pointer group ${isDark ? "hover:text-white" : "hover:text-black"}`}>
                     <input 
                       type="checkbox"
@@ -259,43 +279,80 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
                     <span>Out of stock</span>
                   </label>
                 </div>
-              </div>
+              )}
+            </div>
 
-              <hr className={isDark ? "border-neutral-850" : "border-stone-200"} />
+            <hr className={isDark ? "border-neutral-850" : "border-stone-200"} />
 
-              {/* Price Range Filter Slider */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center text-left">
-                  <h3 className="font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold">
-                    Price Cap
-                  </h3>
-                  <span className={`font-mono text-[10px] font-bold ${isDark ? "bg-neutral-900 text-neutral-350" : "bg-stone-100 text-stone-500"} px-1.5 py-0.5`}>
-                    ${maxPrice}.00
-                  </span>
+            {/* Price Range Filter Slider */}
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setPriceOpen(!priceOpen);
+                  audioAmbiance.playInquireTone();
+                }}
+                className="w-full flex items-center justify-between font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold text-left cursor-pointer group"
+              >
+                <span className="flex items-center gap-2">
+                  Price Cap
+                  {maxPrice < 900 && (
+                    <span className={`inline-flex items-center justify-center px-1.5 py-0.5 text-[8px] font-mono rounded-sm ${
+                      isDark ? "bg-[#8A6A45]/20 text-[#8A6A45]" : "bg-[#8A6A45]/15 text-[#8A6A45]"
+                    }`}>
+                      ${maxPrice}
+                    </span>
+                  )}
+                </span>
+                <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-200 ${priceOpen ? "rotate-90" : ""}`} />
+              </button>
+              {priceOpen && (
+                <div className="space-y-3 pt-1">
+                  <div className="flex justify-between items-center font-mono text-[9px] text-[#8A6A45]">
+                    <span>Current Max:</span>
+                    <span className="font-bold">${maxPrice}.00</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="100" 
+                    max="900" 
+                    step="50"
+                    value={maxPrice} 
+                    onChange={(e) => { setMaxPrice(Number(e.target.value)); audioAmbiance.playInquireTone(); }}
+                    className={`w-full accent-[#8A6A45] cursor-pointer h-1.5 ${isDark ? "bg-neutral-800" : "bg-stone-200"} rounded-lg appearance-none`}
+                  />
+                  <div className="flex justify-between font-mono text-[9px] text-stone-400">
+                    <span>$100.00</span>
+                    <span>$895.00</span>
+                  </div>
                 </div>
-                <input 
-                  type="range" 
-                  min="100" 
-                  max="900" 
-                  step="50"
-                  value={maxPrice} 
-                  onChange={(e) => { setMaxPrice(Number(e.target.value)); audioAmbiance.playInquireTone(); }}
-                  className={`w-full accent-[#8A6A45] cursor-pointer h-1.5 ${isDark ? "bg-neutral-800" : "bg-stone-200"} rounded-lg appearance-none`}
-                />
-                <div className="flex justify-between font-mono text-[9px] text-stone-400">
-                  <span>$100.00</span>
-                  <span>$895.00</span>
-                </div>
-              </div>
+              )}
+            </div>
 
-              <hr className={isDark ? "border-neutral-850" : "border-stone-200"} />
+            <hr className={isDark ? "border-neutral-850" : "border-stone-200"} />
 
-              {/* Photographers Checkbox Filter */}
-              <div className="space-y-3">
-                <h3 className="font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold">
+            {/* Photographers Checkbox Filter */}
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setPhotographerOpen(!photographerOpen);
+                  audioAmbiance.playInquireTone();
+                }}
+                className="w-full flex items-center justify-between font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold text-left cursor-pointer group"
+              >
+                <span className="flex items-center gap-2">
                   Photographer
-                </h3>
-                <div className={`space-y-2 h-[220px] overflow-y-auto pr-2 scrollbar-thin ${isDark ? "scrollbar-thumb-neutral-800 text-neutral-300" : "scrollbar-thumb-stone-200 text-stone-700"} font-mono text-xs`}>
+                  {selectedPhotographers.length > 0 && (
+                    <span className={`inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[8px] font-mono rounded-full ${
+                      isDark ? "bg-[#8A6A45]/20 text-[#8A6A45]" : "bg-[#8A6A45]/15 text-[#8A6A45]"
+                    }`}>
+                      {selectedPhotographers.length}
+                    </span>
+                  )}
+                </span>
+                <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-200 ${photographerOpen ? "rotate-90" : ""}`} />
+              </button>
+              {photographerOpen && (
+                <div className={`space-y-2 h-[220px] overflow-y-auto pr-2 premium-scrollbar ${isDark ? "text-neutral-300" : "text-stone-700"} font-mono text-xs pt-1`}>
                   {AVAILABLE_PHOTOGRAPHERS.map(name => (
                     <label 
                       key={name} 
@@ -314,16 +371,34 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
                     </label>
                   ))}
                 </div>
-              </div>
+              )}
+            </div>
 
-              <hr className={isDark ? "border-neutral-850" : "border-stone-200"} />
+            <hr className={isDark ? "border-neutral-850" : "border-stone-200"} />
 
-              {/* Size Checkbox Filter */}
-              <div className="space-y-3">
-                <h3 className="font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold">
+            {/* Size Checkbox Filter */}
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setSizeOpen(!sizeOpen);
+                  audioAmbiance.playInquireTone();
+                }}
+                className="w-full flex items-center justify-between font-mono text-[10px] uppercase text-[#8A6A45] tracking-[0.2em] font-bold text-left cursor-pointer group"
+              >
+                <span className="flex items-center gap-2">
                   Size
-                </h3>
-                <div className={`space-y-2 font-mono text-xs ${isDark ? "text-neutral-300" : "text-stone-700"}`}>
+                  {selectedSizes.length > 0 && (
+                    <span className={`inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[8px] font-mono rounded-full ${
+                      isDark ? "bg-[#8A6A45]/20 text-[#8A6A45]" : "bg-[#8A6A45]/15 text-[#8A6A45]"
+                    }`}>
+                      {selectedSizes.length}
+                    </span>
+                  )}
+                </span>
+                <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-200 ${sizeOpen ? "rotate-90" : ""}`} />
+              </button>
+              {sizeOpen && (
+                <div className={`space-y-2 font-mono text-xs ${isDark ? "text-neutral-300" : "text-stone-700"} pt-1`}>
                   {SIZES.map(size => (
                     <label 
                       key={size} 
@@ -342,21 +417,21 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
                     </label>
                   ))}
                 </div>
-              </div>
-
-              {/* Reset active filters action */}
-              {(selectedPhotographers.length > 0 || selectedAvailability.length > 0 || maxPrice < 900 || selectedSizes.length > 0) && (
-                <button
-                  onClick={handleResetFilters}
-                  className="w-full py-2.5 border border-[#8A6A45] text-[#8A6A45] hover:bg-[#8A6A45]/5 font-mono text-xxs uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all text-center cursor-pointer rounded-none"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  Reset Filters
-                </button>
               )}
-            </motion.aside>
-          )}
-        </AnimatePresence>
+            </div>
+
+            {/* Reset active filters action */}
+            {(selectedPhotographers.length > 0 || selectedAvailability.length > 0 || maxPrice < 900 || selectedSizes.length > 0) && (
+              <button
+                onClick={handleResetFilters}
+                className="w-full py-2.5 border border-[#8A6A45] text-[#8A6A45] hover:bg-[#8A6A45]/5 font-mono text-xxs uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all text-center cursor-pointer rounded-none mt-4"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Reset Filters
+              </button>
+            )}
+          </aside>
+        )}
 
         {/* MOBILE FILTERS BAR */}
         <div className="lg:hidden w-full flex flex-wrap gap-2 mb-4">

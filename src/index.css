@@ -17,6 +17,25 @@
   scrollbar-width: none;
 }
 
+/* Premium subtle scrollbar for sticky filter panel */
+.premium-scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+.premium-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.premium-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(138, 106, 69, 0.2);
+  border-radius: 9999px;
+}
+.premium-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(138, 106, 69, 0.4);
+}
+.premium-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(138, 106, 69, 0.2) transparent;
+}
+
 /* Luxury cursor elements */
 .luxury-cursor {
   mix-blend-mode: difference;
