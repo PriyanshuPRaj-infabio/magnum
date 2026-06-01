@@ -207,12 +207,12 @@ export default function GalleryCorridor({ artworks, selectedArtwork, onSelectArt
           <div className="flex items-center gap-3">
             <button 
               onClick={() => { setShowFilters(!showFilters); audioAmbiance.playInquireTone(); }}
-              className={`flex items-center gap-2 px-4 py-2 border ${isDark ? "border-neutral-800 bg-neutral-950 text-neutral-300 hover:text-white hover:border-neutral-700" : "border-stone-300 bg-white text-stone-700 hover:border-black"} text-xs font-mono uppercase tracking-wider transition-colors rounded-none shadow-sm cursor-pointer`}
+              className={`hidden lg:flex items-center gap-2 px-4 py-2 border ${isDark ? "border-neutral-800 bg-neutral-950 text-neutral-300 hover:text-white hover:border-neutral-700" : "border-stone-300 bg-white text-stone-700 hover:border-black"} text-xs font-mono uppercase tracking-wider transition-colors rounded-none shadow-sm cursor-pointer`}
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#8A6A45]" />
               {showFilters ? "Hide Filters" : "Show Filters"}
             </button>
-            <div className={`h-8 w-px ${isDark ? "bg-neutral-800" : "bg-stone-200"}`} />
+            <div className={`hidden lg:block h-8 w-px ${isDark ? "bg-neutral-800" : "bg-stone-200"}`} />
             <span className={`font-mono text-[10px] uppercase tracking-widest ${isDark ? "text-neutral-500 bg-neutral-900/60" : "text-stone-400 bg-stone-100"} px-3 py-1.5 font-medium`}>
               {filteredArtworks.length} Results
             </span>

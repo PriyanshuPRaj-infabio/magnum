@@ -218,16 +218,16 @@ export default function App() {
       <div className="absolute inset-0 bg-repeat bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KPC9zdmc+')] opacity-30 pointer-events-none z-10" />
 
       {/* FIXED SOPHISTICATED NAVIGATION BAR */}
-      <nav id="app-nav-bar" className="fixed top-0 left-0 right-0 z-50 w-full bg-black/95 backdrop-blur-md border-b border-stone-800/60 px-6 md:px-14 py-4 flex items-center justify-between shadow-[0_6px_30px_rgba(0,0,0,0.7)]">
+      <nav id="app-nav-bar" className="fixed top-0 left-0 right-0 z-50 w-full bg-black/95 backdrop-blur-md border-b border-stone-800/60 px-4 sm:px-8 md:px-14 py-4 flex items-center justify-between shadow-[0_6px_30px_rgba(0,0,0,0.7)]">
         {/* Left segment: Magnum Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => changeTab("vault")}>
-          <span className="font-mono text-[15px] md:text-[18px] font-bold tracking-[0.35em] text-white uppercase">
+          <span className="font-mono text-[13px] sm:text-[16px] md:text-[18px] font-bold tracking-[0.25em] sm:tracking-[0.35em] text-white uppercase">
             MAGNUM
           </span>
         </div>
 
-        {/* Center: Navigation tabs — larger and more readable */}
-        <div className="flex items-center gap-5 md:gap-12">
+        {/* Center: Navigation tabs — responsive spacing and sizing */}
+        <div className="flex items-center gap-3 sm:gap-6 md:gap-12">
           {([
             { key: "vault" as const, label: "Arrival" },
             { key: "corridor" as const, label: "Corridor" },
@@ -237,7 +237,7 @@ export default function App() {
             <button
               key={tab.key}
               onClick={() => changeTab(tab.key)}
-              className={`relative cursor-pointer text-[11px] md:text-[13px] uppercase tracking-[0.2em] font-mono font-medium transition-all duration-400 pb-1 ${activeTab === tab.key
+              className={`relative cursor-pointer text-[10px] sm:text-[12px] md:text-[13px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-mono font-medium transition-all duration-400 pb-1 ${activeTab === tab.key
                 ? "text-[#ECE7DF]"
                 : "text-[#ECE7DF]/40 hover:text-[#ECE7DF]/80"
                 }`}
@@ -369,7 +369,7 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                       <button
                         onClick={() => triggerAcquireFlow(selectedArtwork!)}
                         className="flex-1 bg-[#8A6A45] hover:bg-[#a68054] text-white font-serif-lux font-light text-xxs uppercase tracking-[0.25em] py-4 transition-all"

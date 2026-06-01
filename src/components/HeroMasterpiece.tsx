@@ -45,7 +45,7 @@ export default function HeroMasterpiece({
   }, []);
 
   return (
-    <div id="hero-vault-arrival" className="relative h-screen w-full bg-[#070707] overflow-hidden flex flex-col justify-between p-6 md:p-12 z-40 select-none">
+    <div id="hero-vault-arrival" className="relative min-h-[calc(100vh-172px)] w-full bg-[#070707] flex flex-col justify-between p-4 sm:p-6 md:p-12 z-40 select-none">
       {/* Volumetric ambient light ray and fine film grain */}
       <div 
         className="absolute inset-0 pointer-events-none mix-blend-screen opacity-35 transition-all duration-[2500ms] ease-out"
@@ -79,7 +79,7 @@ export default function HeroMasterpiece({
           animate={{ opacity: 0.8 }}
           whileHover={{ opacity: 1, scale: 1.05 }}
           onClick={onToggleAmbience}
-          className="flex items-center gap-3 px-5 py-2.5 rounded-full border border-[#D8D1C7]/10 bg-black/40 backdrop-blur-xl text-[#ECE7DF] hover:border-[#8A6A45]/30 cursor-pointer transition-all duration-500"
+          className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full border border-[#D8D1C7]/10 bg-black/40 backdrop-blur-xl text-[#ECE7DF] hover:border-[#8A6A45]/30 cursor-pointer transition-all duration-500"
         >
           <AnimatePresence mode="wait">
             {isAmbienceActive ? (
@@ -95,7 +95,7 @@ export default function HeroMasterpiece({
                   <span className="w-0.5 bg-[#8A6A45] rounded-full animate-[bounce_1.4s_infinite_400ms] h-1/2" />
                   <span className="w-0.5 bg-[#8A6A45] rounded-full animate-[bounce_1.4s_infinite_200ms] h-2/3" />
                 </div>
-                <span className="font-mono text-[9px] uppercase tracking-[0.25em]">Soundscape Active</span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.25em] hidden sm:inline">Soundscape Active</span>
                 <Volume2 className="w-3.5 h-3.5 text-[#8A6A45]" />
               </motion.div>
             ) : (
@@ -106,7 +106,7 @@ export default function HeroMasterpiece({
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="flex items-center gap-2"
               >
-                <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#D8D1C7]/70">Soundscape Muted</span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#D8D1C7]/70 hidden sm:inline">Soundscape Muted</span>
                 <VolumeX className="w-3.5 h-3.5 text-[#D8D1C7]/50" />
               </motion.div>
             )}
@@ -139,7 +139,7 @@ export default function HeroMasterpiece({
           {/* Master Painting Canvas */}
           <motion.div 
             whileHover={{ rotateY: coords.x / 1.5, rotateX: -coords.y / 1.5 }}
-            className="relative bg-black p-4 md:p-6 pb-12 md:pb-16 shadow-[0_30px_100px_rgba(0,0,0,0.95)] border border-[#ECE7DF]/15 rounded-sm transition-transform duration-300"
+            className="relative bg-black p-4 md:p-6 pb-16 md:pb-24 shadow-[0_30px_100px_rgba(0,0,0,0.95)] border border-[#ECE7DF]/15 rounded-sm transition-transform duration-300"
           >
             {/* Museum highlight glow layer on frame */}
             <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
@@ -149,13 +149,13 @@ export default function HeroMasterpiece({
                 src={imgSrc}
                 alt={masterpiece.title}
                 referrerPolicy="no-referrer"
-                className="w-[280px] h-[340px] md:w-[420px] md:h-[500px] object-cover transition-transform duration-[6000ms] group-hover:scale-105"
+                className="w-full max-w-[240px] sm:max-w-[280px] md:max-w-[420px] h-[280px] sm:h-[340px] md:h-[500px] object-cover transition-transform duration-[6000ms] group-hover:scale-105"
                 style={{ filter: "contrast(1.04) brightness(0.95)" }}
               />
             </div>
 
             {/* Brass museum title placard below art */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center w-[85%] text-center">
+            <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center w-[85%] text-center">
               <h2 className="font-serif text-[#ECE7DF] text-sm md:text-base tracking-[0.2em] uppercase leading-none font-light">
                 {masterpiece.title}
               </h2>
@@ -194,12 +194,12 @@ export default function HeroMasterpiece({
           </p>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => onAcquire(masterpiece)}
-            className="px-6 py-3.5 bg-[#8A6A45] text-stone-100 rounded-none font-serif tracking-[0.3em] font-light text-xxs uppercase cursor-pointer hover:bg-[#a37f54] transition-all duration-300"
+            className="w-full sm:w-auto px-6 py-3.5 bg-[#8A6A45] text-stone-100 rounded-none font-serif tracking-[0.3em] font-light text-xxs uppercase cursor-pointer hover:bg-[#a37f54] transition-all duration-300 text-center"
           >
             ACQUIRE ARTWORK
           </motion.button>
@@ -207,7 +207,7 @@ export default function HeroMasterpiece({
             whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.06)" }}
             whileTap={{ scale: 0.98 }}
             onClick={onExplore}
-            className="px-6 py-3.5 border border-[#D8D1C7]/20 text-[#ECE7DF] rounded-none font-serif tracking-[0.3em] font-light text-xxs uppercase flex items-center gap-2 cursor-pointer transition-all duration-500"
+            className="w-full sm:w-auto px-6 py-3.5 border border-[#D8D1C7]/20 text-[#ECE7DF] rounded-none font-serif tracking-[0.3em] font-light text-xxs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all duration-500 text-center"
           >
             ENTER CORRIDOR <ArrowDown className="w-3.5 h-3.5 animate-bounce text-[#8A6A45]" />
           </motion.button>
