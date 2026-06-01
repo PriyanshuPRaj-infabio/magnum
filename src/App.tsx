@@ -264,17 +264,10 @@ export default function App() {
 
       {/* MAIN RENDER ENGINE */}
       <div className={`flex-1 pt-[72px] transition-opacity duration-300 ${isTransitioning ? "opacity-0" : "opacity-100"}`}>
-        <AnimatePresence mode="wait">
 
           {/* SECTION I: IMMERSIVE HERO VAULT */}
           {activeTab === "vault" && (
-            <motion.div
-              key="tab-vault"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-            >
+            <div key="tab-vault">
               <HeroMasterpiece
                 masterpiece={selectedArtwork || MASTER_ARTWORKS[0]}
                 onExplore={() => changeTab("corridor")}
@@ -282,18 +275,12 @@ export default function App() {
                 isAmbienceActive={isAmbienceActive}
                 onToggleAmbience={handleToggleAmbience}
               />
-            </motion.div>
+            </div>
           )}
 
           {/* SECTION II: THE GALLERY CORRIDOR TRACK */}
           {activeTab === "corridor" && (
-            <motion.div
-              key="tab-corridor"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-            >
+            <div key="tab-corridor">
               <GalleryCorridor
                 artworks={MASTER_ARTWORKS}
                 selectedArtwork={selectedArtwork}
@@ -402,19 +389,12 @@ export default function App() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* SECTION IV: ARTIST STORIES / JOURNAL */}
           {activeTab === "journal" && (
-            <motion.div
-              key="tab-journal"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              className="py-16 px-6 md:px-16"
-            >
+            <div key="tab-journal" className="py-16 px-6 md:px-16">
               <div className="max-w-5xl mx-auto text-left">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="h-px w-8 bg-[#8A6A45]" />
@@ -501,19 +481,12 @@ export default function App() {
 
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* SECTION V: CURATED ADVISORY COUNSELOR OFFICE */}
           {activeTab === "advisor" && (
-            <motion.div
-              key="tab-advisor"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              className="py-12 md:py-16 px-6 md:px-16"
-            >
+            <div key="tab-advisor" className="py-12 md:py-16 px-6 md:px-16">
               <div className="max-w-4xl mx-auto">
                 <div className={`flex items-center justify-between border-b ${isDark ? "border-stone-800" : "border-stone-300"} pb-8 mb-10 text-left`}>
                   <div>
@@ -620,10 +593,9 @@ export default function App() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
-        </AnimatePresence>
       </div>
 
       {/* SIGNATURE COLLECTOR MODE CONTROL BAR AT BOTTOM */}
