@@ -111,12 +111,6 @@ export default function App() {
 
     return () => clearInterval(interval);
   }, [activeTab]);
-
-  // Enable scroll to change tabs
-  const tabsOrder: ("vault" | "corridor" | "journal" | "advisor")[] = ["vault", "corridor", "journal", "advisor"];
-  const lastScrollTimeRef = useRef<number>(0);
-  const touchStartYRef = useRef<number>(0);
-
   const changeTab = (tabKey: typeof activeTab, options?: { scrollToBottom?: boolean }) => {
     if (tabKey === activeTab || isTransitioningRef.current) return;
     isTransitioningRef.current = true;
@@ -142,77 +136,6 @@ export default function App() {
       }
     }, 300);
   };
-
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      const now = Date.now();
-      if (isTransitioningRef.current) return;
-      // Cooldown to prevent rapidly skipping multiple tabs (1500ms)
-      if (now - lastScrollTimeRef.current < 1500) return;
-
-      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
-      const isAtTop = window.scrollY <= 15;
-
-      const currentIndex = tabsOrder.indexOf(activeTab);
-
-      if (e.deltaY > 20 && isAtBottom) {
-        if (currentIndex < tabsOrder.length - 1) {
-          e.preventDefault();
-          lastScrollTimeRef.current = now;
-          const nextTab = tabsOrder[currentIndex + 1];
-          changeTab(nextTab);
-        }
-      } else if (e.deltaY < -20 && isAtTop) {
-        if (currentIndex > 0) {
-          e.preventDefault();
-          lastScrollTimeRef.current = now;
-          const prevTab = tabsOrder[currentIndex - 1];
-          changeTab(prevTab, { scrollToBottom: true });
-        }
-      }
-    };
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartYRef.current = e.touches[0].clientY;
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const now = Date.now();
-      if (isTransitioningRef.current) return;
-      if (now - lastScrollTimeRef.current < 1500) return;
-
-      const touchEndY = e.changedTouches[0].clientY;
-      const deltaY = touchStartYRef.current - touchEndY; // Positive is scroll down (swipe up)
-
-      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 25;
-      const isAtTop = window.scrollY <= 15;
-
-      const currentIndex = tabsOrder.indexOf(activeTab);
-
-      if (deltaY > 60 && isAtBottom) {
-        if (currentIndex < tabsOrder.length - 1) {
-          lastScrollTimeRef.current = now;
-          changeTab(tabsOrder[currentIndex + 1]);
-        }
-      } else if (deltaY < -60 && isAtTop) {
-        if (currentIndex > 0) {
-          lastScrollTimeRef.current = now;
-          changeTab(tabsOrder[currentIndex - 1], { scrollToBottom: true });
-        }
-      }
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchend", handleTouchEnd, { passive: true });
-
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [activeTab]);
-
   const handleToggleAmbience = () => {
     const newState = !isAmbienceActive;
     setIsAmbienceActive(newState);
