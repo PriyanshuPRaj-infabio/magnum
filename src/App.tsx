@@ -33,6 +33,8 @@ import GalleryCorridor from "./components/GalleryCorridor";
 export default function App() {
   // Navigation & Sections
   const [activeTab, setActiveTab] = useState<"vault" | "corridor" | "journal" | "advisor">("vault");
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const isTransitioningRef = useRef(false);
   const detailInspectorRef = useRef<HTMLDivElement | null>(null);
 
   // Custom states
@@ -115,14 +117,41 @@ export default function App() {
   const lastScrollTimeRef = useRef<number>(0);
   const touchStartYRef = useRef<number>(0);
 
+  const changeTab = (tabKey: typeof activeTab, options?: { scrollToBottom?: boolean }) => {
+    if (tabKey === activeTab || isTransitioningRef.current) return;
+    isTransitioningRef.current = true;
+    setIsTransitioning(true);
+    audioAmbiance.playInquireTone();
+
+    setTimeout(() => {
+      setActiveTab(tabKey);
+      
+      if (options?.scrollToBottom) {
+        setTimeout(() => {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "instant" as any
+          });
+          setIsTransitioning(false);
+          isTransitioningRef.current = false;
+        }, 50);
+      } else {
+        window.scrollTo(0, 0);
+        setIsTransitioning(false);
+        isTransitioningRef.current = false;
+      }
+    }, 300);
+  };
+
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now();
-      // Cooldown to prevent rapidly skipping multiple tabs (1200ms)
-      if (now - lastScrollTimeRef.current < 1200) return;
+      if (isTransitioningRef.current) return;
+      // Cooldown to prevent rapidly skipping multiple tabs (1500ms)
+      if (now - lastScrollTimeRef.current < 1500) return;
 
-      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 12;
-      const isAtTop = window.scrollY <= 12;
+      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
+      const isAtTop = window.scrollY <= 15;
 
       const currentIndex = tabsOrder.indexOf(activeTab);
 
@@ -131,23 +160,14 @@ export default function App() {
           e.preventDefault();
           lastScrollTimeRef.current = now;
           const nextTab = tabsOrder[currentIndex + 1];
-          setActiveTab(nextTab);
-          window.scrollTo(0, 0);
+          changeTab(nextTab);
         }
       } else if (e.deltaY < -20 && isAtTop) {
         if (currentIndex > 0) {
           e.preventDefault();
           lastScrollTimeRef.current = now;
           const prevTab = tabsOrder[currentIndex - 1];
-          setActiveTab(prevTab);
-
-          // Wait for render, then scroll to bottom of the previous section
-          setTimeout(() => {
-            window.scrollTo({
-              top: document.documentElement.scrollHeight,
-              behavior: "instant" as any
-            });
-          }, 30);
+          changeTab(prevTab, { scrollToBottom: true });
         }
       }
     };
@@ -158,7 +178,8 @@ export default function App() {
 
     const handleTouchEnd = (e: TouchEvent) => {
       const now = Date.now();
-      if (now - lastScrollTimeRef.current < 1200) return;
+      if (isTransitioningRef.current) return;
+      if (now - lastScrollTimeRef.current < 1500) return;
 
       const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartYRef.current - touchEndY; // Positive is scroll down (swipe up)
@@ -171,19 +192,12 @@ export default function App() {
       if (deltaY > 60 && isAtBottom) {
         if (currentIndex < tabsOrder.length - 1) {
           lastScrollTimeRef.current = now;
-          setActiveTab(tabsOrder[currentIndex + 1]);
-          window.scrollTo(0, 0);
+          changeTab(tabsOrder[currentIndex + 1]);
         }
       } else if (deltaY < -60 && isAtTop) {
         if (currentIndex > 0) {
           lastScrollTimeRef.current = now;
-          setActiveTab(tabsOrder[currentIndex - 1]);
-          setTimeout(() => {
-            window.scrollTo({
-              top: document.documentElement.scrollHeight,
-              behavior: "instant" as any
-            });
-          }, 30);
+          changeTab(tabsOrder[currentIndex - 1], { scrollToBottom: true });
         }
       }
     };
@@ -283,7 +297,7 @@ export default function App() {
       {/* FIXED SOPHISTICATED NAVIGATION BAR */}
       <nav id="app-nav-bar" className="fixed top-0 left-0 right-0 z-50 w-full bg-black/95 backdrop-blur-md border-b border-stone-800/60 px-6 md:px-14 py-4 flex items-center justify-between shadow-[0_6px_30px_rgba(0,0,0,0.7)]">
         {/* Left segment: Magnum Logo */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab("vault")}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => changeTab("vault")}>
           <span className="font-mono text-[15px] md:text-[18px] font-bold tracking-[0.35em] text-white uppercase">
             MAGNUM
           </span>
@@ -299,7 +313,7 @@ export default function App() {
           ]).map(tab => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => changeTab(tab.key)}
               className={`relative cursor-pointer text-[11px] md:text-[13px] uppercase tracking-[0.2em] font-mono font-medium transition-all duration-400 pb-1 ${activeTab === tab.key
                 ? "text-[#ECE7DF]"
                 : "text-[#ECE7DF]/40 hover:text-[#ECE7DF]/80"
@@ -326,7 +340,7 @@ export default function App() {
       </nav>
 
       {/* MAIN RENDER ENGINE */}
-      <div className="flex-1 pt-[72px]">
+      <div className={`flex-1 pt-[72px] transition-opacity duration-300 ${isTransitioning ? "opacity-0" : "opacity-100"}`}>
         <AnimatePresence mode="wait">
 
           {/* SECTION I: IMMERSIVE HERO VAULT */}
@@ -340,7 +354,7 @@ export default function App() {
             >
               <HeroMasterpiece
                 masterpiece={selectedArtwork || MASTER_ARTWORKS[0]}
-                onExplore={() => setActiveTab("corridor")}
+                onExplore={() => changeTab("corridor")}
                 onAcquire={triggerAcquireFlow}
                 isAmbienceActive={isAmbienceActive}
                 onToggleAmbience={handleToggleAmbience}
@@ -455,7 +469,7 @@ export default function App() {
                       <button
                         onClick={() => {
                           setAdvisoryMessage(`Regarding "${selectedArtwork?.title}" by ${selectedArtwork?.artist}: how do you counsel setting this up in my dynamic modernist collection?`);
-                          setActiveTab("advisor");
+                          changeTab("advisor");
                         }}
                         className="flex-1 border border-stone-800 hover:bg-stone-900 text-[#ECE7DF] font-serif-lux font-light text-xxs uppercase tracking-[0.25em] py-4 transition-all"
                       >
@@ -547,7 +561,7 @@ export default function App() {
                           </span>
                           <h4
                             onClick={() => {
-                              setActiveTab("corridor");
+                              changeTab("corridor");
                               handleSelectArtwork(art);
                             }}
                             className={`font-serif-lux text-lg ${isDark ? "text-[#ECE7DF]" : "text-stone-900"} hover:text-[#8A6A45] cursor-pointer transition-colors`}
